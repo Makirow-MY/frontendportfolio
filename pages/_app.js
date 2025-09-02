@@ -8,7 +8,25 @@ import 'aos/dist/aos.css';
 import { useEffect, useState } from "react";
 import { Toaster } from "react-hot-toast";
 
+import i18next from 'i18next';
+import { initReactI18next } from 'react-i18next';
+import { I18nextProvider } from 'react-i18next';
+import en from './json/en.json';
+import fr from './json/fr.json';
 
+i18next
+  .use(initReactI18next)
+  .init({
+    resources: {
+      en: { translation: en },
+      fr: { translation: fr },
+    },
+    lng: typeof window !== 'undefined' ? localStorage.getItem('preferredLanguage') || 'en' : 'en',
+    fallbackLng: 'en',
+    interpolation: {
+      escapeValue: false,
+    },
+  });
 
 export default function App({ Component, pageProps }) {
   const [glowPosition, setGlowPosition] = useState({ x: 0, y: 0 });
@@ -80,8 +98,8 @@ export default function App({ Component, pageProps }) {
     root.style.transition = '6s ease-in-out';
   }, [CurrentColor]);
 
-  return (
-    <>
+ return (
+    <I18nextProvider i18n={i18next}>
       <Preloader isLoading={isloading} />
       <div style={{ position: 'absolute', top: '0%', left: 0, zIndex: 100000 }}>
         <Toaster />
@@ -105,6 +123,6 @@ export default function App({ Component, pageProps }) {
         </main>
       )}
       <Footer />
-    </>
+    </I18nextProvider>
   );
 }
