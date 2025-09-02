@@ -1,0 +1,21 @@
+{
+  "contact": {
+    "email": "E-mail",
+    "phone": "Téléphone",
+    "linkedin": "LinkedIn",
+    "github": "GitHub",
+    "address": "Adresse physique",
+    "contact_us": "Nous contacter",
+    "submit": "Envoyer",
+    "next": "Suivant",
+    "back": "Retour",
+    "accept": "Accepter",
+    "reject": "Rejeter les non-essentiels"
+  },
+  "general": {
+    "loading": "Chargement...",
+    "success": "Succès !",
+    "error": "Une erreur s'est produite. Veuillez réessayer.",
+    "explore": "Explorer"
+  }
+}

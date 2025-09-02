@@ -1,0 +1,362 @@
+{
+  "header": {
+    "brand": "MYG Tech",
+    "home": "Accueil",
+    "services": "Services",
+    "projects": "Projets",
+    "blog": "Blog",
+    "contact": "Contact",
+    "hire_me": "Engagez-moi !"
+  },
+  "hero": {
+    "greeting": "Bonjour",
+    "subtitle": "Je suis Makia Yengue Godwill, un passionné",
+    "title_part1": "Ingénieur en informatique +",
+    "roles": [
+      "Ingénieur télécom +",
+      "Ingénieur réseau +",
+      "Développeur web +",
+      "Développeur mobile +",
+      "Designer UI/UX +",
+      "Designer graphique"
+    ],
+    "lead": "Je fournis des solutions numériques de classe mondiale, alliant une technologie de pointe à une excellence créative. Mon travail garantit des expériences fluides et de haute qualité qui captivent les utilisateurs et stimulent la croissance des entreprises.",
+    "download_cv": "Télécharger le CV",
+    "experience": "Années d'expérience",
+    "projects": "Projets terminés",
+    "customers": "Clients satisfaits"
+  },
+  "experience_education": {
+    "experience_title": "Expériences",
+    "education_title": "Éducation",
+    "freelance": {
+      "title": "Développeur freelance",
+      "description": "Développement d'applications web et mobiles, y compris un système de réservation de films, avec un accent sur l'ingénierie logicielle et la gestion de bases de données."
+    },
+    "intern": {
+      "title": "Stagiaire, NewTelnet Cameroun",
+      "description": "Assistance à la conception de systèmes de télécommunication et optimisation des configurations réseau pour une connectivité améliorée."
+    },
+    "contributor": {
+      "title": "Contributeur de projet, Université de Buea",
+      "description": "Collaboration à des projets de conception de réseaux, appliquant des compétences en ingénierie logicielle et réseau pour des solutions sur le campus."
+    },
+    "junior": {
+      "title": "Développeur junior, Startup locale",
+      "description": "Construction d'applications web et gestion de bases de données, améliorant l'expérience utilisateur et l'efficacité du système."
+    },
+    "university": {
+      "title": "Université de Buea",
+      "description": "Ingénierie informatique générale, avec des cours en logiciels, réseaux et télécommunications."
+    },
+    "gce_advanced": {
+      "title": "Niveau avancé GCE (Éducation secondaire)",
+      "description": "Diplômé avec mention de l'éducation secondaire après avoir obtenu des notes impressionnantes dans les 5 matières scientifiques avec un point global exceptionnel de 22 / 25, préparant aux études d'ingénierie."
+    },
+    "gce_ordinary": {
+      "title": "Niveau ordinaire GCE (Éducation secondaire)",
+      "description": "Réussi avec excellence dans les 11 matières, avec des notes impressionnantes en sciences pures, sciences sociales et arts, me donnant un point exceptionnel de 29 / 33."
+    }
+  },
+  "skills": {
+    "title": "Mes compétences",
+    "description": "Je transforme des idées audacieuses en solutions technologiques puissantes. Avec des compétences affûtées et une passion pour les résultats, je livre des innovations rapides, intelligentes et sans tracas.",
+    "react": "React.js & Next.js (frontend)",
+    "nodejs": "Node.js (backend)",
+    "mongodb": "MongoDB (base de données)",
+    "figma": "Figma (UI/UX)",
+    "photoshop": "Photoshop (graphiques)",
+    "flutter": "Flutter (mobile)",
+    "gns3": "GNS3 (Réseautage)"
+  },
+  "services": {
+    "title": "Mes services",
+    "description": "Services de développement premium pour les entreprises visionnaires, les organisations ou les particuliers. Nous transformons les idées en expériences numériques performantes qui produisent des résultats.",
+    "website": {
+      "title": "Développement web",
+      "description": "Transformez votre présence numérique avec nos services de développement web premium. Nous créons des sites web ultra-rapides et optimisés pour le SEO qui convertissent les visiteurs en clients.",
+      "highlights": [
+        "Développement full-stack",
+        "Intégration d'API RESTful",
+        "Conception de bases de données",
+        "Optimisation des performances",
+        "Sécurité robuste"
+      ]
+    },
+    "mobile": {
+      "title": "Développement mobile",
+      "description": "Applications mobiles de qualité native qui ravissent les utilisateurs et stimulent l'engagement. Construit avec React Native pour une excellence multiplateforme.",
+      "highlights": [
+        "Déploiement iOS et Android",
+        "Architecture hors ligne prioritaire",
+        "Authentification biométrique",
+        "Optimisation pour les stores d'applications"
+      ]
+    },
+    "design": {
+      "title": "Conception graphique et UI/UX",
+      "description": "Solutions de conception complètes qui relient l'identité visuelle et l'expérience numérique. Des esthétiques de marque aux interfaces intuitives, nous créons des designs qui captivent et convertissent.",
+      "highlights": [
+        "Conception de logo et d'identité de marque",
+        "Conception d'interface utilisateur",
+        "Optimisation de l'expérience utilisateur",
+        "Matériel de marketing",
+        "Prototypes interactifs",
+        "Création de systèmes de conception"
+      ]
+    },
+    "network": {
+      "title": "Administration réseau",
+      "description": "Solutions d'infrastructure réseau fiables et sécurisées qui maintiennent votre entreprise connectée et protégée.",
+      "highlights": [
+        "Configuration et mise en place du réseau",
+        "Mise en œuvre de la sécurité",
+        "Surveillance des performances",
+        "Dépannage"
+      ]
+    },
+    "video": {
+      "title": "Montage vidéo",
+      "description": "Services de production vidéo professionnels qui racontent votre histoire avec impact et qualité cinématographique.",
+      "highlights": [
+        "Montage vidéo 4K",
+        "Graphismes animés",
+        "Étalonnage des couleurs",
+        "Conception sonore"
+      ]
+    }
+  },
+  "projects": {
+    "title": "Mes travaux récents",
+    "description": "Développement de projets premium pour les entreprises visionnaires, les organisations ou les particuliers. Nous transformons les idées en expériences numériques performantes qui produisent des résultats.",
+    "no_projects": "Aucun projet trouvé"
+  },
+  "blogs": {
+    "title": "Blogs récents",
+    "description": "Partage d'idées sur les tendances en ingénierie logicielle, réseaux et télécommunications, avec un accent sur les solutions innovantes et les avancées de l'industrie.",
+    "no_blogs": "Aucun blog trouvé"
+  },
+  "footer": {
+    "brand_description": "Création d'expériences numériques qui inspirent et ravissent. Créons quelque chose d'extraordinaire ensemble.",
+    "explore": "Explorer",
+    "newsletter_title": "S'abonner à la newsletter",
+    "newsletter_description": "Rejoignez mon parcours créatif ! Recevez des mises à jour exclusives, des idées de conception et un accès anticipé aux nouveaux projets.",
+    "subscribe": "S'abonner",
+    "email_placeholder": "Votre email",
+    "copyright": "© {{year}} MYG Tech. Tous droits réservés.",
+    "made_with": "Fait avec amour par vous",
+    "privacy_policy": "Politique de confidentialité",
+    "terms_of_service": "Conditions de service"
+  },
+  "privacy":{
+      "title": "Politique de confidentialité",
+  "last_updated": "Dernière mise à jour : {{date}}",
+  "sections": {
+    "introduction": {
+      "title": "Introduction",
+      "content": [
+        "Bienvenue chez MYG Tech, géré par Makia Yengue Godwill, un ingénieur informatique professionnel spécialisé dans le développement web, le développement mobile, la conception UI/UX, l'administration de réseaux et le montage vidéo. Cette politique de confidentialité régit la collecte, l'utilisation, le stockage et la protection des informations personnelles et non personnelles lorsque vous interagissez avec notre site de portfolio.",
+        "Cette politique est conçue pour traiter tous les aspects de la gestion des données, de la collecte à la résolution des litiges, avec un souci du détail pour éliminer toute ambiguïté et assurer la clarté."
+      ]
+    },
+    "data_collection": {
+      "title": "Collecte de données",
+      "content": [
+        "Nous collectons des informations pour fournir des services personnalisés, répondre aux demandes et améliorer votre expérience sur notre site de portfolio.",
+        "Informations de contact : Inclut le nom complet, l'adresse e-mail, le numéro de téléphone, le nom de l'entreprise, le pays et tout autre détail fourni via notre formulaire de contact en plusieurs étapes.",
+        "Informations techniques : Nous collectons des informations sur les appareils, les adresses IP, les types de navigateurs et les modèles d'utilisation via des cookies et des outils d'analyse pour optimiser les performances du site.",
+        "Contenu généré par l'utilisateur : Toute information que vous fournissez volontairement, comme des commentaires sur les articles de blog ou des demandes de projet, peut être collectée et stockée."
+      ]
+    },
+    "data_usage": {
+      "title": "Utilisation des données",
+      "content": [
+        "Les informations que nous collectons sont utilisées pour fournir et améliorer nos services, répondre aux demandes et communiquer des mises à jour de projets ou des opportunités.",
+        "Les informations de contact sont utilisées pour répondre à vos demandes, fournir des devis ou discuter de collaborations potentielles.",
+        "Les informations techniques nous aident à analyser les performances du site et le comportement des utilisateurs pour améliorer la fonctionnalité et l'expérience utilisateur.",
+        "Le contenu généré par l'utilisateur peut être utilisé pour présenter des témoignages ou des retours sur les projets avec votre consentement explicite."
+      ]
+    },
+    "payment_data": {
+      "title": "Données de paiement",
+      "content": [
+        "Pour les services nécessitant un paiement (par exemple, le développement de sites web ou la conception UI/UX), nous collectons les informations de paiement via des processeurs tiers sécurisés comme PayPal ou Stripe.",
+        "Nous ne stockons pas les informations de paiement sensibles, telles que les numéros de carte de crédit, sur nos serveurs. Toutes les transactions sont cryptées et gérées par des passerelles de paiement de confiance."
+      ]
+    },
+    "cookies": {
+      "title": "Cookies et suivi",
+      "content": [
+        "Notre site utilise des cookies pour améliorer l'expérience utilisateur, suivre les modèles d'utilisation et fournir un contenu personnalisé.",
+        "Cookies essentiels : Nécessaires pour la fonctionnalité du site, comme la gestion de sessions et la sécurité.",
+        "Cookies d'analyse : Utilisés pour collecter des données anonymisées sur le comportement des utilisateurs afin d'améliorer les performances du site.",
+        "Vous pouvez gérer les préférences de cookies via notre fenêtre contextuelle de consentement aux cookies ou les paramètres de votre navigateur."
+      ]
+    },
+    "data_sharing": {
+      "title": "Partage des données",
+      "content": [
+        "Nous ne vendons ni ne partageons vos informations personnelles avec des tiers à des fins de marketing.",
+        "Les données peuvent être partagées avec des fournisseurs de services de confiance (par exemple, outils d'analyse, processeurs de paiement) pour faciliter les opérations du site, sous réserve d'accords de confidentialité stricts.",
+        "Dans de rares cas, nous pouvons divulguer des informations pour respecter des obligations légales ou protéger nos droits."
+      ]
+    },
+    "data_transfers": {
+      "title": "Transferts de données",
+      "content": [
+        "En tant que fournisseur de services mondial, vos données peuvent être transférées et traitées dans des pays hors de votre juridiction, y compris des régions avec des lois de protection des données différentes.",
+        "Nous veillons à ce que tous les transferts de données respectent les réglementations applicables, telles que le RGPD, grâce à des clauses contractuelles types ou des garanties équivalentes."
+      ]
+    },
+    "rights": {
+      "title": "Vos droits",
+      "content": [
+        "Vous avez le droit d'accéder, de corriger ou de supprimer vos informations personnelles détenues par nous.",
+        "Vous pouvez également demander des restrictions sur le traitement des données ou vous opposer à certaines utilisations, comme le suivi analytique.",
+        "Pour exercer ces droits, contactez-nous en utilisant les coordonnées fournies dans la section Nous contacter."
+      ]
+    },
+    "security": {
+      "title": "Sécurité des données",
+      "content": [
+        "Nous mettons en œuvre des mesures de sécurité robustes, y compris le cryptage, des serveurs sécurisés et des contrôles d'accès, pour protéger vos données contre tout accès non autorisé ou violation.",
+        "Malgré nos efforts, aucune plateforme en ligne n'est totalement à l'abri des risques. Nous nous efforçons de maintenir les normes les plus élevées en matière de sécurité des données."
+      ]
+    },
+    "third_party_links": {
+      "title": "Liens tiers",
+      "content": [
+        "Notre site peut contenir des liens vers des sites tiers, tels que LinkedIn ou GitHub. Nous ne sommes pas responsables des pratiques de confidentialité ou du contenu de ces sites externes.",
+        "Nous vous encourageons à consulter les politiques de confidentialité de tout site tiers que vous visitez."
+      ]
+    },
+    "children_privacy": {
+      "title": "Confidentialité des enfants",
+      "content": [
+        "Nos services ne sont pas destinés aux personnes de moins de 16 ans. Nous ne collectons pas sciemment d'informations personnelles auprès des enfants.",
+        "Si vous pensez que nous avons collecté par erreur des données d'un mineur, veuillez nous contacter immédiatement pour les faire supprimer."
+      ]
+    },
+    "dispute_resolution": {
+      "title": "Résolution des litiges",
+      "content": [
+        "Tout litige relatif à cette politique de confidentialité sera résolu par négociation ou médiation dans un premier temps.",
+        "En cas de non-résolution, les litiges seront régis par les lois du Cameroun, avec juridiction dans les tribunaux de Buea."
+      ]
+    },
+    "liability": {
+      "title": "Responsabilité",
+      "content": [
+        "Nous ne sommes pas responsables des dommages découlant de l'utilisation de notre site ou de nos services, sauf si requis par la loi applicable.",
+        "Notre responsabilité est limitée dans la mesure permise par la loi, et nous nous efforçons de maintenir la transparence dans toutes les pratiques liées aux données."
+      ]
+    },
+    "changes": {
+      "title": "Modifications de cette politique",
+      "content": [
+        "Nous pouvons mettre à jour cette politique de confidentialité périodiquement pour refléter les changements dans nos pratiques ou les exigences légales.",
+        "Les modifications importantes seront communiquées par e-mail ou par un avis prominent sur notre site."
+      ]
+    }
+  },
+  "contact": {
+    "title": "Nous contacter",
+    "content": "Pour toute question, préoccupation ou demande concernant cette politique de confidentialité, veuillez nous contacter à :",
+    "email": "E-mail : makiayengue@gmail.com",
+    "phone": "Téléphone : (+237) 651-497-070",
+    "linkedin": "LinkedIn : linkedin.com/in/makia-yengue-godwill-lavie-7aba12258",
+    "address": "Adresse physique : MYG Tech, Buea, Région du Sud-Ouest, Cameroun"
+  }
+},
+"terms": {
+  "title": "Conditions d'utilisation",
+  "effective": "En vigueur : 08-Aout 2025",
+  "sections": {
+    "introduction": {
+      "title": "Introduction",
+      "content": [
+        "Ces conditions d'utilisation régissent votre utilisation du site de portfolio MYG Tech, y compris toutes les fonctionnalités telles que les formulaires de contact, les interactions avec le blog, les demandes de projet et le traitement des paiements pour des services comme le développement de sites web et la conception UI/UX."
+      ]
+    },
+    "usage": {
+      "title": "Utilisation acceptable",
+      "content": [
+        "Pour garantir un environnement sûr et professionnel, vous acceptez d'utiliser le site MYG Tech conformément aux règles suivantes et à toutes les lois applicables.",
+        "Vous ne pouvez pas utiliser le site pour vous engager dans des activités illégales, distribuer du contenu malveillant ou tenter d'accéder sans autorisation à nos systèmes.",
+        "Tout usage abusif, y compris l'envoi de spams via les formulaires de contact ou la soumission de fausses informations, peut entraîner la suspension de l'accès."
+      ]
+    },
+    "service_agreements": {
+      "title": "Accords de service",
+      "content": [
+        "Tous les services, tels que le développement de sites web, le développement d'applications mobiles ou la conception UI/UX, sont soumis à des accords formels définissant la portée, les délais et les conditions de paiement.",
+        "Les accords de service sont finalisés après un consentement mutuel par e-mail ou par des contrats signés.",
+        "Les paiements pour les services sont traités de manière sécurisée via des plateformes tierces comme PayPal ou Stripe."
+      ]
+    },
+    "content": {
+      "title": "Contenu",
+      "content": [
+        "Tout le contenu du site MYG Tech, y compris les textes, images et extraits de code, appartient à MYG Tech sauf indication contraire.",
+        "Vous ne pouvez pas reproduire, distribuer ou modifier notre contenu sans autorisation explicite."
+      ]
+    },
+    "intellectual_property": {
+      "title": "Propriété intellectuelle",
+      "content": [
+        "Les projets livrés aux clients, tels que les sites web ou les applications mobiles, sont transférés avec les droits de propriété intellectuelle convenus dans l'accord de service.",
+        "MYG Tech conserve le droit de présenter les projets réalisés dans notre portfolio, sauf accord contraire."
+      ]
+    },
+    "liability": {
+      "title": "Responsabilité",
+      "content": [
+        "MYG Tech n'est pas responsable des dommages découlant de l'utilisation de notre site ou de nos services, sauf si requis par la loi applicable.",
+        "Nous nous efforçons de fournir des services de haute qualité, mais nous ne pouvons garantir un accès ininterrompu à notre site ou des performances sans erreur."
+      ]
+    },
+    "termination": {
+      "title": "Résiliation",
+      "content": [
+        "Nous nous réservons le droit de résilier ou de suspendre l'accès à notre site ou à nos services en cas de violation de ces conditions d'utilisation.",
+        "Les clients peuvent résilier les accords de service conformément aux termes décrits dans le contrat."
+      ]
+    },
+    "dispute_resolution": {
+      "title": "Résolution des litiges",
+      "content": [
+        "Tout litige découlant de ces conditions d'utilisation sera résolu par négociation ou médiation dans un premier temps.",
+        "En cas de non-résolution, les litiges seront régis par les lois du Cameroun, avec juridiction dans les tribunaux de Buea."
+      ]
+    },
+    "governing": {
+      "title": "Loi applicable",
+      "content": [
+        "Ces conditions d'utilisation sont régies par les lois du Cameroun, sans égard aux principes de conflit de lois."
+      ]
+    },
+    "changes": {
+      "title": "Modifications de ces conditions",
+      "content": [
+        "Nous pouvons mettre à jour ces conditions d'utilisation périodiquement pour refléter les changements dans nos pratiques ou les exigences légales.",
+        "Les modifications importantes seront communiquées par e-mail ou par un avis prominent sur notre site."
+      ]
+    }
+  },
+  "acceptance": {
+    "message": "J'ai lu et j'accepte les conditions d'utilisation de MYG Tech :",
+    "button": {
+      "accept": "Accepter les conditions",
+      "accepted": "✓ Accepté"
+    }
+  },
+  "contact": {
+    "title": "Nous contacter",
+    "content": "Pour toute question ou préoccupation concernant ces conditions d'utilisation, veuillez nous contacter à :",
+    "email": "E-mail : makiayengue@gmail.com",
+    "phone": "Téléphone : (+237) 651-497-070",
+    "linkedin": "LinkedIn : linkedin.com/in/makia-yengue-godwill-lavie-7aba12258",
+    "address": "Adresse physique : MYG Tech, Buea, Région du Sud-Ouest, Cameroun"
+  }
+}
+}
