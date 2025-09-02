@@ -7,8 +7,8 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { useEffect, useState } from "react";
 import { Toaster } from "react-hot-toast";
-import { I18nextProvider } from 'react-i18next';
-import i18next from './i18n';
+
+
 
 export default function App({ Component, pageProps }) {
   const [glowPosition, setGlowPosition] = useState({ x: 0, y: 0 });
@@ -81,7 +81,7 @@ export default function App({ Component, pageProps }) {
   }, [CurrentColor]);
 
   return (
-    <I18nextProvider i18n={i18next}>
+    <>
       <Preloader isLoading={isloading} />
       <div style={{ position: 'absolute', top: '0%', left: 0, zIndex: 100000 }}>
         <Toaster />
@@ -105,6 +105,6 @@ export default function App({ Component, pageProps }) {
         </main>
       )}
       <Footer />
-    </I18nextProvider>
+    </>
   );
 }
