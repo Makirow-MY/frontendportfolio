@@ -24,8 +24,6 @@ if (method === 'GET') {
         
         if (!existingBlog) {
             const createdBlog = await Blog.create(blog);
-            console.log(`Created blog "${blog.title}" with ID: ${createdBlog._id}`);
-
             const commentGroups = generateRandomComments(blog, createdBlog._id);
             const commentIds = [];
 
@@ -39,9 +37,7 @@ if (method === 'GET') {
                     };
                     const mainComment = await Comment.create(mainCommentData);
                     commentIds.push(mainComment._id);
-                    console.log(`Created main comment "${mainComment.title}" for blog "${blog.title}"`);
-
-                    // Prepare reply comments with both parent and blog references
+                   // Prepare reply comments with both parent and blog references
                     const replyComments = group.replyComments.map(reply => ({
                         ...reply,
                         parent: mainComment._id,
@@ -51,8 +47,7 @@ if (method === 'GET') {
 
                     // Insert reply comments
                     const createdReplies = await Comment.insertMany(replyComments);
-                    console.log(`Created ${createdReplies.length} reply comments for main comment "${mainComment.title}"`);
-
+                    
                     // Update main comment with children IDs
                     await Comment.updateOne(
                         { _id: mainComment._id },
@@ -73,9 +68,7 @@ if (method === 'GET') {
                 { $set: { comments: commentIds } } // Using $set instead of $push to ensure complete array
             );
             //console.log(`Updated blog "${blog.title}" with ${commentIds.length} comment IDs`);
-        } else {
-            console.log(`Blog "${blog.title}" already exists, skipping comment creation`);
-        }
+        } 
     }
 } catch (error) {
     console.error("Error populating default blogs or comments:", error);
