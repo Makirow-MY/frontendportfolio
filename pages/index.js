@@ -553,7 +553,7 @@ const RecentBlogs = ({ handleMouseMove, glowPosition, allwork, index, formatDate
             >
               <div className="re_blogimg">
                 <img src={blog.images[index]} alt={blog.title}/>
-                <span>{blog.blogcategory[0]}</span>
+                <span>{blog.blogcategory}</span>
               </div>
               <div className="re_bloginfo">
                 <div className="re_topdate flex gap-1">

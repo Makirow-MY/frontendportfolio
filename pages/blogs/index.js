@@ -222,7 +222,7 @@ export default function blogs() {
             data-aos-delay="400"
           ></div>
           
-          <div className='featuredposts'>
+          <div className='featuredposts latestpostsdata'>
             <div 
               className='fetitle flex'
               data-aos="fade-right"
@@ -248,13 +248,13 @@ export default function blogs() {
                 modules={[FreeMode, Autoplay]}
               >
                 {
-                  loading ? <div className='flex flex-center wh_50'>
+                  loading  && sliderpubdata.length === 0 ? <div className='flex flex-center wh_50'>
                     <Spinner />
                   </div>
                   :
                   <>
                     {
-                      sliderpubdata.slice(0,6).map((blog) => (
+                    !loading  && sliderpubdata.length > 0 && sliderpubdata.slice(0,6).map((blog) => (
                         <SwiperSlide 
                           key={blog._id}
                           data-aos="zoom-in"
@@ -274,18 +274,15 @@ export default function blogs() {
                               data-aos="fade-up"
                               data-aos-delay="100"
                             >
-                              {
-                                blog.blogcategory.map((cat) => {
-                                  return <Link 
-                                    href={`/blogs/category${cat}`} 
+                              <Link 
+                                    href={`/blogs/category/${blog.blogcategory}`} 
                                     className='vr'
                                     data-aos="flip-left"
                                     data-aos-delay={150 * index}
                                   >
-                                    <span className='ai'></span>{cat}
+                                    <span className='ai'></span>{blog.blogcategory}
                                   </Link> 
-                                })
-                              }
+                               
                             </div>
 
                             <div className='fpostinfo'>
@@ -312,6 +309,14 @@ export default function blogs() {
                         </SwiperSlide>)
                       )
                     }
+                    {
+                         !loading  && sliderpubdata.length === 0 && <h3 
+        className="w-100 flex flex-center mt-3"
+        data-aos="fade-up"
+      >
+        No Testimonials Found
+      </h3>
+                    }
                   </>
                 }
               </Swiper>
@@ -332,7 +337,7 @@ export default function blogs() {
       style={{ left: `${glowPosition.x}px`, top: `${glowPosition.y}px` }}
     ></div>
     
-    <div className="sp__section-header">
+    <div className="sp__section-header latestpostsdata">
       <h2 
         className="sp__section-title"
         data-aos="fade-up"
@@ -351,12 +356,12 @@ export default function blogs() {
     </div>
 
     {curreproject.length === 0 && (
-      <h1 
+      <h3 
         className="w-100 flex flex-center mt-3"
         data-aos="fade-up"
       >
         No Testimonials Found
-      </h1>
+      </h3>
     )}
 
     <div 
@@ -475,10 +480,10 @@ export default function blogs() {
                     </Link>
                     <a 
                       className='link' 
-                      href={`/blogs/category${blog.blogcategory[0]}`}
+                      href={`/blogs/category/${blog.blogcategory}`}
                       data-aos="fade-right"
                     >
-                      {blog.blogcategory[0]}
+                      {blog.blogcategory}
                     </a>
                   </div>
 

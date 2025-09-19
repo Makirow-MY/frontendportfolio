@@ -68,14 +68,7 @@ const ProjectSlug = () => {
     }, [slug, delet, saveCart, addedToCart]);
 
     // Image carousel effect
-    useEffect(() => {
-        if (blogData.project.images.length > 1) {
-            const interval = setInterval(() => {
-                setCurrentIndex((prev) => (prev + 1) % blogData.project.images.length);
-            }, 3000);
-            return () => clearInterval(interval);
-        }
-    }, [blogData.project?.images]);
+  
 
     // Format date
     const formatDate = (date) => {

@@ -1,147 +1,198 @@
-import { mongooseConnect } from '@/lib/mongoose';
-import { Project } from "@/models/Project";
-import { Review } from '@/models/Review';
-import { Blog } from '@/models/Blog';
-import { Comment } from '@/models/Comment';
+import { neon } from '@neondatabase/serverless';
+import { v4 as uuidv4 } from 'uuid';
+const sql = neon('postgresql://neondb_owner:npg_P6GLxeoWFS5u@ep-curly-heart-ae2jb0gb-pooler.c-2.us-east-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require'); // Use process.env.DATABASE_URL if needed
+const formatDate = (date) => {
+  if (!date || isNaN(date)) {
+    return '';
+  }
+  const options = {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour12: true
+  };
+  return new Intl.DateTimeFormat('en-US', options).format(date);
+};
 
-import toast from 'react-hot-toast';
 
 export default async function handler(req, res) {
-    
-await mongooseConnect();
-const method = req.method;
-const {slug} = req.query;
- //console.log('slluuuuugg22222222', slug)
-if (method === 'GET') {
-       if (slug) {
-      //  console.log('slluuuuugg', slug)
-        try {
-            const project = await Project.findOne({slug});
-          //  console.log('slluuuuugg', slug, "project", project)
-            if (!project) {
-                 return res.status(404).json({message: " No Project Found "})
-            }
-          
-            const review = await Review.find({project: project._id}).sort({createdAt: -1});
-           // console.log("Slug", slug, "Blog", blog, comments)
-            if (project.review.length > 0) {
-                  project.review.forEach(async(review) => {
-                      const reviewFetch = await Review.findById(review);
-                          
-                            if (!reviewFetch) {
-                                  project.review = project.review.filter(rev => rev !== review);
-                                  
-                                  await project.save();
-                            }
- })
-             }
+  const method = req.method;
+  const { slug } = req.query;
 
-            res.status(200).json({project, review})
-        } catch (error) {
-            console.log(error);
-             return res.status(500).json({message: "Server Error"})
-        }
-             
-       }
-       
-
-} 
-
-else if (method === 'POST') {
-
-     if (slug) {
-        
-  try {
-
-
-         const {
-             title,
-        projectSlug,
-        name,
-        email,
-        image,
-         role,
-        company,
-         website,
-         rating,
-         message,
-         consent,
-          commentId,
-         deleteEmail
-          } = req.body;
-
-        if (!commentId && !deleteEmail) {
-            
-const project = await Project.findOne({slug});
-
+  if (method === 'GET') {
+    try {
+      if (slug) {
+        const [project] = await sql`SELECT * FROM projects WHERE slug = ${slug}`;
         if (!project) {
-             return res.status(404).json({message: " No Blog Found "})
+          return res.status(404).json({ message: " No Project Found " });
         }
-        
-        else{
-             const newReview = new Review({
-         name,
-          image: image || `https://ui-avatars.com/api/?name=${name}&background=random`, 
-          email, 
-           projectName: project.title,
-        projectSlug: project.slug, 
-          role,
-        company,
-         website,
-         rating,
-         message,
-         consent: consent,
-        project: project._id,
-        })
-
-    await newReview.save(); 
-    project.review.push(newReview._id);
-    await project.save();
-    res.status(201).json(newReview);
-
-        }
-
-        }
-
-        else{
-       
-                   const check = await Review.findOne({email:deleteEmail, _id: commentId})
-            if (check) {
-               
-                if (check._id) {
-                     
-                     await Review.findByIdAndDelete({_id: check._id});
-                      return res.status(201).json({message: "Comment Deleted! successffully "})
-                }
-            } else {
-                 toast.error("By your email, you are not permitted to delete this post")
-                   return res.status(503).json({message: "By your email, you are not permitted to delete this post",
-                     error: true})
+        const reviews = await sql`SELECT * FROM reviews WHERE project_id = ${project.id} ORDER BY createdat DESC`;
+        if (project.review && project.review.length > 0) {
+          for (const reviewId of project.review) {
+            const [reviewFetch] = await sql`SELECT id FROM reviews WHERE id = ${reviewId}`;
+            if (!reviewFetch) {
+              project.review = project.review.filter(id => id !== reviewId);
+              await sql`
+                UPDATE projects
+                SET review = ${JSON.stringify(project.review)},
+                    updatedat = CURRENT_TIMESTAMP
+                WHERE id = ${project.id}
+              `;
             }
-           
-           
-            // const parentcomment = await Comment.findByIdAndDelete({_id: commentId});
-            //    if (!parentcomment) {
-            //  return res.status(404).json({message: " Parent Comment Not Found! "})
-      //  }
-
-    }
-
-        
+          }
+        }
+        return res.status(200).json({
+          project: {
+            _id: project.id,
+            title: project.title,
+            slug: project.slug,
+            images: project.images,
+            client: project.client,
+            description: project.description,
+            projectcategory: project.projectcategory,
+            tags: project.tags,
+            livepreview: project.livepreview,
+            status: project.status,
+            price: project.price,
+            review: project.review,
+            projectType: project.projecttype,
+            technologies: project.technologies,
+            features: project.features,
+            platforms: project.platforms,
+            projectYear: project.projectyear,
+            repositoryUrl: project.repositoryurl,
+            documentationUrl: project.documentationurl,
+            isResponsive: project.isresponsive,
+            licenseType: project.licensetype,
+            supportAvailable: project.supportavailable,
+            categoryFields: project.category_fields,
+            createdAt: project.createdat,
+            updatedAt: project.updatedat
+          },
+          review: reviews.map(r => ({
+            _id: r.id,
+            name: r.name,
+            image: r.image,
+            email: r.email,
+            message: r.message,
+            role: r.role,
+            website: r.website,
+            company: r.company,
+            project: r.project_id,
+            projectName: r.project_name,
+            projectSlug: r.project_slug,
+            rating: r.rating,
+            consent: r.consent,
+            createdAt: r.createdat,
+            updatedAt: r.updatedat
+          }))
+        });
+      }
     } catch (error) {
-             res.status(500).json({message: "Server Error"});
+      return res.status(500).json({ message: "Server Error" });
     }
-
-
-     }
-   
-}
-
-else {
- 
-    res.setHeader('Allow', ['GET', 'POST']); 
+  } else if (method === 'POST') {
+    if (slug) {
+      try {
+        const {
+          title,
+          projectSlug,
+          name,
+          email,
+          image,
+          role,
+          company,
+          website,
+          rating,
+          message,
+          consent,
+          commentId,
+          deleteEmail
+        } = req.body;
+        if (!commentId && !deleteEmail) {
+          const [project] = await sql`SELECT * FROM projects WHERE slug = ${slug}`;
+          if (!project) {
+            return res.status(404).json({ message: " No Blog Found " });
+          }
+          const reviewId = uuidv4();
+          const newReview = {
+            _id: reviewId,
+            name,
+            image: image || `https://ui-avatars.com/api/?name=${name}&background=random`,
+            email,
+            message,
+            role,
+            website,
+            company,
+            project: project.id,
+            projectName: project.title,
+            projectSlug: project.slug,
+            rating,
+            consent,
+            createdAt: new Date(),
+            updatedAt: new Date()
+          };
+          await sql`
+            INSERT INTO reviews (
+              id, name, image, email, message, role, website, company,
+              project_id, project_name, project_slug, rating, consent,
+              createdat, updatedat
+            )
+            VALUES (
+              ${reviewId}, ${name}, ${image || `https://ui-avatars.com/api/?name=${name}&background=random`},
+              ${email}, ${message}, ${role}, ${website}, ${company},
+              ${project.id}, ${project.title}, ${project.slug}, ${rating}, ${consent},
+              CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+            )
+          `;
+          const updatedReviews = [...(project.review || []), reviewId];
+          await sql`
+            UPDATE projects
+            SET review = ${JSON.stringify(updatedReviews)},
+                updatedat = CURRENT_TIMESTAMP
+            WHERE id = ${project.id}
+          `;
+          await sql`
+            INSERT INTO notifications (
+              id, type, model, dataid, title, message, createddate, read, createdat, updatedat
+            )
+            VALUES (
+              ${uuidv4()}, 'add', 'Review', ${reviewId}, 'New Review Added',
+              ${`Review added for project: ${project.title}`}, CURRENT_TIMESTAMP, FALSE,
+              CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+            )
+          `;
+          return res.status(201).json(newReview);
+        } else {
+          const [check] = await sql`
+            SELECT * FROM reviews WHERE email = ${deleteEmail} AND id = ${commentId}
+          `;
+          if (check) {
+            await sql`DELETE FROM reviews WHERE id = ${check.id}`;
+            await sql`
+              INSERT INTO notifications (
+                id, type, model, dataid, title, message, createddate, read, createdat, updatedat
+              )
+              VALUES (
+                ${uuidv4()}, 'delete', 'Review', ${check.id}, 'Review Deleted',
+                ${`Review deleted for project`}, CURRENT_TIMESTAMP, FALSE,
+                CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+              )
+            `;
+            return res.status(201).json({ message: "Comment Deleted! successfully " });
+          } else {
+            return res.status(503).json({
+              message: "By your email, you are not permitted to delete this post",
+              error: true
+            });
+          }
+        }
+      } catch (error) {
+        return res.status(500).json({ message: "Server Error" });
+      }
+    }
+  } else {
+    res.setHeader('Allow', ['GET', 'POST']);
     res.status(405).end(`Method ${method} is not allowed`);
-    
-}
-
+  }
 }

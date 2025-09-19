@@ -95,9 +95,9 @@ useEffect(() => {
     const countLikes = () => {
       const counts = {};
       alldata.forEach(blog => {
-        blog.blogcategory.forEach(category => {
-          counts[category] = (counts[category] || 0) + 1;
-        });
+       
+          counts[blog.blogcategory] = (counts[blog.blogcategory] || 0) + 1;
+      
       });
       setLikeCounts(counts);
     };
@@ -230,7 +230,7 @@ const prevpro = () => {
 
 const handleCommentSubmit = async (e) =>{
     e.preventDefault();
-
+    toast.loading("Publishing Post...")
     if (NewComm.name === '' || NewComm.email === '' || NewComm.contentPera === '') {
         toast.error("Please Provide All Information")
     } else {
@@ -272,7 +272,7 @@ try {
                 comments: [response.data, ...prev.comments]
             }))
         }
-
+ toast.dismiss();
         toast.success("✅ Comment posted successfully");
          if (commentRef.current) {
         commentRef.current.scrollIntoView({
@@ -295,6 +295,7 @@ try {
                     setTimeout(() => setmessageOk(''), 3000);
     } catch (error) {
       //  console.error(error)
+      toast.dismiss()
         toast.error("❌ Failed To Post Comment", error)
     }
 
@@ -885,16 +886,18 @@ const RenderComments = (comments) =>{
                   <div className="nameemailcomment">
                     <input 
                       type="text"
+                      required
                       value={NewComm.name}
                       onChange={(e) => setNewComm({...NewComm, name: e.target.value})}
-                      placeholder="Enter Your Name"
+                      placeholder="Enter Your Name*"
                       data-aos="fade-right"
                     />
                     <input 
                       type="email"
+                      required
                       value={NewComm.email}
                       onChange={(e) => setNewComm({...NewComm, email: e.target.value})}
-                      placeholder="Enter Your Email Address"
+                      placeholder="Enter Your Email Address*"
                       data-aos="fade-left"
                     />
                   </div>
@@ -902,8 +905,9 @@ const RenderComments = (comments) =>{
                   <input 
                     type="text"
                     value={NewComm.title}
+                    required                    
                     onChange={(e) => setNewComm({...NewComm, title: e.target.value})}
-                    placeholder="Enter Your Comment Title"
+                    placeholder="Enter Your Comment Title*"
                     data-aos="fade-up"
                   />
                   
@@ -913,7 +917,8 @@ const RenderComments = (comments) =>{
                     value={NewComm.contentPera}
                     onChange={(e) => setNewComm({...NewComm, contentPera: e.target.value})}
                     style={{resize:'none'}} 
-                    placeholder="Write Your Comment Here" 
+                    required
+                    placeholder="Write Your Comment Here*" 
                     id="textcomments"
                     data-aos="fade-up"
                   ></textarea>
@@ -966,7 +971,16 @@ const RenderComments = (comments) =>{
               >
                 <h2>CATEGORIES</h2>
                 <ul>
-                  {Object.entries(likeCounts).map(([category, count], index) => (
+                  {
+                      Object.entries(likeCounts).length === 0 &&
+                       <li 
+                        data-aos="fade-up"
+                        data-aos-delay={500 + (index * 50)}
+                      >
+                        <Spinner />
+                        </li>
+                  }
+                  {Object.entries(likeCounts).length > 0 && Object.entries(likeCounts).map(([category, count], index) => (
                     <Link 
                       href={`/blogs/category/${category}`}
                       key={category}

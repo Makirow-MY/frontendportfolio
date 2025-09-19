@@ -425,79 +425,25 @@ const highest = variables.reduce((max, current) =>
       top: `${glowPosition.y}px`,
     }}
   ></div>
-  
-  <div className='container'>
-    <div 
-      className='featuredposts' 
-      style={{paddingBottom: 0, paddingTop: 0}}
-      data-aos="fade-up"
-    >
-      <div className='fetitle flex flex-sb' data-aos="fade-right">
-        <h3 style={{color: 'var(main-site-color)'}}>UI/UX & GRAPHIC Design Project</h3>
-        <a 
-          href={`/projects/category/Graphic Design`} 
-          className="viwa"
-          data-aos="fade-left"
-          data-aos-delay="100"
-        >
-          View All
-        </a>
-      </div>
-      
-      <div className='ffeposts flex'>
-        <Swiper
-          slidesPerView={"auto"}
-          freeMode={true}
-          spaceBetween={25}
-          loop={true}
-          autoplay={{
-            delay: 2000,
-            disableOnInteraction: false
-          }}
-          className='mySwiper'
-          modules={[FreeMode, Autoplay]}
-        >
-          {loading ? (
-            <Spinner />
-          ) : (
-            <>
-              {pulishedData
-                .filter(ba => (ba.projectcategory === 'Graphic & UI/UX Design' || ba.projectcategory === 'Network Design'))
-                .slice(0,6)
-                .map((blog, index) => (
-                  <SwiperSlide key={blog._id} data-aos="zoom-in" data-aos-delay={index * 100}>
-                    <div className='fpost' key={blog._id}>
-                      <Link href={`/projects/${blog.slug}`}>
-                        <img src={blog.images[0]} alt={blog.title} />
-                      </Link>
-                      
-                      <div className='tegs flex' style={{background:'var(main-hover-color)'}}>
-                        <Link 
-                          href={`/projects/category${blog.projectcategory}`} 
-                          className='vr' 
-                          style={{color:'var(main-hover-color)'}}
-                        >
-                          <span className='ai'></span>{blog.projectcategory}
-                        </Link> 
-                      </div>
-                    </div>
-                  </SwiperSlide>
-                ))
-              }
-            </>
-          )}
-        </Swiper>
-      </div>
-    </div>
-  </div>
 
-  <div className='container' style={{paddingTop:'2rem'}}>
+  {
+     loading && pulishedData.length === 0 && <div className="wh_50 flex flex-center"><Spinner/></div>
+  }
+
+  {
+     !loading && pulishedData.length === 0 && <div className="wh_50 flex flex-center">No Data Found</div>
+  }
+  {
+     !loading && pulishedData.length > 0 && <>
+     
+     {
+  pulishedWebData.length > 0 &&  <div className='container' style={{paddingTop:'2rem'}}>
     <div 
       className='latestpostsdata'
       data-aos="fade-up"
     >
       <div className='fetitle flex flex-sb'>
-        <h3 style={{color: 'var(main-site-color)'}} data-aos="fade-right">Website Dev Projects</h3>
+        <h3 style={{color: 'var(main-site-color)'}} data-aos="fade-right">Website Projects</h3>
         <a 
           href={`/projects/category/Website Development`} 
           className="viwa"
@@ -536,7 +482,7 @@ const highest = variables.reduce((max, current) =>
                     text={blog.description} 
                   />
                   
-                  <h4 className='flex'>
+                  <h4 className='flex mt-2'>
                     {blog.projectType === 'Showcase' ? (
                       <span className="fr">Free</span>
                     ) : (
@@ -551,14 +497,17 @@ const highest = variables.reduce((max, current) =>
       </div>
     </div>
   </div>
-
+}
+ 
+ {
+   pulishedMobData.length > 0 &&
   <div className='container' style={{paddingTop:'2rem'}}>
     <div 
       className='latestpostsdata'
       data-aos="fade-up"
     >
       <div className='fetitle flex flex-sb'>
-        <h3 style={{color: 'var(main-site-color)'}} data-aos="fade-right">Mobile Dev Projects</h3>
+        <h3 style={{color: 'var(main-site-color)'}} data-aos="fade-right">App Projects</h3>
         <a 
           href={`/projects/category/Mobile Development`} 
           className="viwa"
@@ -613,6 +562,79 @@ const highest = variables.reduce((max, current) =>
     </div>
   </div>
 
+ }
+
+
+  {
+    pulishedData.filter(ba => (ba.projectcategory === 'Graphic & UI/UX Design' || ba.projectcategory === 'Network Design')).length > 0 && <div className='container'>
+    <div 
+      className='featuredposts latestpostsdata' 
+      style={{paddingBottom: 0, paddingTop: 0}}
+      data-aos="fade-up"
+    >
+      <div className='fetitle flex flex-sb' data-aos="fade-right">
+        <h3 style={{color: 'var(main-site-color)'}}>UI/UX & GRAPHIC Design Project</h3>
+        <a 
+          href={`/projects/category/Graphic Design`} 
+          className="viwa"
+          data-aos="fade-left"
+          data-aos-delay="100"
+        >
+          View All
+        </a>
+      </div>
+      
+      <div className='ffeposts flex'>
+        <Swiper
+          slidesPerView={"auto"}
+          freeMode={true}
+          spaceBetween={25}
+          loop={true}
+          autoplay={{
+            delay: 2000,
+            disableOnInteraction: false
+          }}
+          className='mySwiper'
+          modules={[FreeMode, Autoplay]}
+        >
+          { loading && pulishedData.length === 0 ? (
+            <Spinner />
+          ) : (
+            <>
+              {  !loading && pulishedData.length > 0 && pulishedData
+                .filter(ba => (ba.projectcategory === 'Graphic & UI/UX Design' || ba.projectcategory === 'Network Design'))
+                .slice(0,6)
+                .map((blog, index) => (
+                  <SwiperSlide key={blog._id} data-aos="zoom-in" data-aos-delay={index * 100}>
+                    <div className='fpost' key={blog._id}>
+                      <Link href={`/projects/${blog.slug}`}>
+                        <img src={blog.images[0]} alt={blog.title} />
+                      </Link>
+                      
+                      <div className='tegs flex' style={{background:'var(main-hover-color)'}}>
+                        <Link 
+                          href={`/projects/category/${blog.projectcategory}`} 
+                          className='vr' 
+                          style={{color:'var(main-hover-color)'}}
+                        >
+                          <span className='ai'></span>{blog.projectcategory}
+                        </Link> 
+                      </div>
+                    </div>
+                  </SwiperSlide>
+                ))
+              }
+            </>
+          )}
+        </Swiper>
+      </div>
+    </div>
+  </div>
+  }
+  
+
+ {  pulishedData
+              .filter(ab => ab.projectcategory === "Video Editing").length > 0 &&
   <div className='container' style={{paddingTop:'2rem'}}>
     <div 
       className='latestpostsdata'
@@ -669,6 +691,10 @@ const highest = variables.reduce((max, current) =>
       </div>
     </div>
   </div>
+}
+     
+     </>
+  }
 </section>
 
       </div>
