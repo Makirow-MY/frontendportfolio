@@ -314,7 +314,7 @@ export default function blogs() {
         className="w-100 flex flex-center mt-3"
         data-aos="fade-up"
       >
-        No Testimonials Found
+        No project Found
       </h3>
                     }
                   </>
@@ -360,7 +360,7 @@ export default function blogs() {
         className="w-100 flex flex-center mt-3"
         data-aos="fade-up"
       >
-        No Testimonials Found
+        No Comments Found
       </h3>
     )}
 
