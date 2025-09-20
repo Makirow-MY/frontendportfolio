@@ -142,14 +142,19 @@ toast.dismiss()
     // Handle testimonial deletion
     const HandleDeletForm = async (e) => {
         e.preventDefault();
-      
+      toast.loading("Deleting Review...")
         if (!deleteEmail) {
+          toast.dismiss()
+          toast.error("Email must be provided")
             setmessageOk("Email must be provided");
             setTimeout(() => setmessageOk(''), 3000);
             return;
         }
 
         if (deleteEmail !== NewReview.email) {
+           toast.dismiss()
+          toast.error("Sorry, email is incorrect. Only the owner can delete");
+            
             setmessageOk("Sorry, email is incorrect. Only the owner can delete");
             setTimeout(() => setmessageOk(''), 3000);
             return;
@@ -169,6 +174,7 @@ toast.dismiss()
 
             setDelet(false);
             setDeleteEmail('');
+             toast.dismiss()
             toast.success("✅ Testimonial deleted successfully");
         } catch (error) {
             toast.error("Incorrect email. Only the sender can delete post");
@@ -279,7 +285,9 @@ const testimonials = getPaginatedTestimonials();
                             <button 
                                 title="Delete review" 
                                 className="modbtn" 
-                                onClick={() => setDelet(true)}
+                                onClick={() => {setDelet(true),
+                                    setNewReview({...NewReview, ReveiewID: testimonial._id, consent: testimonial.consent, email: testimonial.email})
+                                }}
                             >
                                 <IoTrash />
                             </button>

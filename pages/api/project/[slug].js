@@ -109,6 +109,7 @@ export default async function handler(req, res) {
           commentId,
           deleteEmail
         } = req.body;
+         
         if (!commentId && !deleteEmail) {
           const [project] = await sql`SELECT * FROM projects WHERE slug = ${slug}`;
           if (!project) {
@@ -157,7 +158,7 @@ export default async function handler(req, res) {
             INSERT INTO notifications (type, model, dataid, title, message, createddate)
             VALUES (
               'add',
-              'Comment',
+              'Review',
               ${reviewId},
               'Review Submission Noted',
               ${`User ${name} (email: ${email}) submitted a review (rating: ${rating}) for project "${project.title}" via our website on ${formatDate(new Date())}. Content: "${message}". Incorporate into performance metrics and initiate response protocols as necessary.`},
@@ -171,21 +172,33 @@ export default async function handler(req, res) {
         }
           return res.status(201).json(newReview);
         } else {
+         
           const [check] = await sql`
             SELECT * FROM reviews WHERE email = ${deleteEmail} AND id = ${commentId}
           `;
           if (check) {
+
+                   try{
+              await sql`
+            INSERT INTO notifications (type, model, dataid, title, message, createddate)
+            VALUES (
+              'delete',
+              'Review',
+              ${check.id},
+              'Review Removal Executed',
+              ${`User ${check.name} (email: ${check.email}) removed his/her review from project "${check.project_name}" through our website on ${formatDate(new Date())}. Recalibrate review aggregates and document the removal for transparency.
+`},
+              CURRENT_TIMESTAMP
+            )
+          `;
+        }
+        catch(error){
+  return res.status(404).json({ message: "Failed to create notification " });
+
+        }
+
             await sql`DELETE FROM reviews WHERE id = ${check.id}`;
-            await sql`
-              INSERT INTO notifications (
-                id, type, model, dataid, title, message, createddate, read, createdat, updatedat
-              )
-              VALUES (
-                ${uuidv4()}, 'delete', 'Review', ${check.id}, 'Review Deleted',
-                ${`Review deleted for project`}, CURRENT_TIMESTAMP, FALSE,
-                CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
-              )
-            `;
+
             return res.status(201).json({ message: "Comment Deleted! successfully " });
           } else {
             return res.status(503).json({

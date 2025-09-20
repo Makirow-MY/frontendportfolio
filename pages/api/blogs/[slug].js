@@ -199,7 +199,7 @@ else if (method === 'POST') {
               'Comment',
               ${replyId},
               'Comment Submission Noted',
-              ${`User ${name} (email: ${email}) replied to a comment submitted "${parentcomment.name}" on the blog titled "${blog.title}", throught the website on ${formatDate(new Date())}. Details: title "${title}", content "${contentPera}", parent reference ${parentcomment.name}. Perform moderation to uphold content standards and facilitate engagement.`},
+              ${`User ${name} (email: ${email}) replied to a comment submitted by "${parentcomment.name}" on the blog titled "${blog.title}", through the website on ${formatDate(new Date())}. Details: title "${title}", content "${contentPera}", parent reference ${parentcomment.name}. Perform moderation to uphold content standards and facilitate engagement.`},
               CURRENT_TIMESTAMP
             )
           `;
@@ -262,7 +262,7 @@ else if (method === 'POST') {
               'Comment',
               ${mainId},
               'Comment Submission Noted',
-              ${`User ${name} (email: ${email}) submitted a comment on the blog "${blog.title}", throught the website on ${formatDate(new Date())}. Details: title "${title}", content "${contentPera}", parent reference  "none". Perform moderation to uphold content standards and facilitate engagement.`},
+              ${`User ${name} (email: ${email}) submitted a comment to the blog "${blog.title}", through the website on ${formatDate(new Date())}. Details: title "${title}", content "${contentPera}", parent reference  "none". Perform moderation to uphold content standards and facilitate engagement.`},
               CURRENT_TIMESTAMP
             )
           `;
@@ -309,7 +309,28 @@ else if (method === 'POST') {
               SELECT * FROM comments WHERE email = ${deleteEmail} AND id = ${commentId} AND maincomment = ${commentmainComment}
             `;
             if (check) {
+
+               try{
+                              await sql`
+                            INSERT INTO notifications (type, model, dataid, title, message, createddate)
+                            VALUES (
+                              'delete',
+                              'Comment',
+                              ${check.id},
+                              'Main Comment Removal Executed',
+                              ${`User ${check.name} (email: ${check.email}) removed his/her comment "${check.title}" from the blog "${check.blogtitle}" via our website on ${formatDate(new Date())}, and as a result all replies were removed.
+                `},
+                              CURRENT_TIMESTAMP
+                            )
+                          `;
+                        }
+                        catch(error){
+                  return res.status(404).json({ message: "Failed to create notification " });
+                
+                        }
+
               await sql`DELETE FROM comments WHERE id = ${check.id}`;
+              
               return res.status(201).json({ message: "Comment Deleted successfully " });
             } else {
               return res.status(503).json({ message: "By your email, you are not permitted to delete this post", error: true });
@@ -323,9 +344,28 @@ else if (method === 'POST') {
             if (check) {
               // Delete replies
               if (check.children && check.children.length > 0) {
+                      
                 await sql`DELETE FROM comments WHERE id = ANY(${check.children})`;
               }
               // Delete main comment
+               try{
+                              await sql`
+                            INSERT INTO notifications (type, model, dataid, title, message, createddate)
+                            VALUES (
+                              'delete',
+                              'Comment',
+                              ${check.id},
+                              'Main Comment Removal Executed',
+                              ${`User ${check.name} (email: ${check.email}) removed his/her comment "${check.title}" from the blog "${check.blogtitle}" via our website on ${formatDate(new Date())}, and as a result all replies were removed.
+                `},
+                              CURRENT_TIMESTAMP
+                            )
+                          `;
+                        }
+                        catch(error){
+                  return res.status(404).json({ message: "Failed to create notification " });
+                
+                        }
               await sql`DELETE FROM comments WHERE id = ${check.id}`;
               return res.status(201).json({ message: "Comment Deleted successfully " });
             } else {
