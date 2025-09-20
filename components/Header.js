@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { FaMoon, FaSun } from "react-icons/fa6";
 import { HiMiniBars3BottomRight } from "react-icons/hi2";
 import { useTranslation } from 'react-i18next';
+import toast from "react-hot-toast";
 
 export default function Header({ state, setState }) {
   const { t, i18n } = useTranslation();
