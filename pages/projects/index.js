@@ -312,7 +312,7 @@ const highest = variables.reduce((max, current) =>
         const interval =  setInterval(() => {
               setCurrentNum((pre) => (pre + 1) % 330); 
               setImage(`https://picsum.photos/1920/1080?random=${CurrentNum}`) 
-  }, 2 * 60 * 1000);
+  }, 5 * 1000);
     return () => {
       clearInterval(interval);
     };
@@ -427,7 +427,9 @@ const highest = variables.reduce((max, current) =>
   ></div>
 
   {
-     loading && pulishedData.length === 0 && <div className="wh_50 flex flex-center"><Spinner/></div>
+     loading && pulishedData.length === 0 && <div className="wh_50 flex flex-center">
+      <Spinner/>
+      </div>
   }
 
   {

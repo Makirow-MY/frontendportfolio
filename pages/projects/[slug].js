@@ -95,7 +95,7 @@ const ProjectSlug = () => {
     // Handle testimonial submission
     const handleReviewSubmit = async (e) => {
         e.preventDefault();
-        
+        toast.loading("Publishing Review...")
         if (!NewReview.consent) {
             setmessageOk("You must consent to displaying testimonial");
             setTimeout(() => setmessageOk(''), 3000);
@@ -105,7 +105,7 @@ const ProjectSlug = () => {
         try {
             const gender = Math.random() > 0.5 ? 'female' : 'male';
             const imageNumber = Math.floor(Math.random() * 100);
-            const image = faker.image.avatar() || `https://cdn.jsdelivr.net/gh/faker-js/assets-person-portrait/${gender}/512/${imageNumber}.jpg`;
+            const image = `https://cdn.jsdelivr.net/gh/faker-js/assets-person-portrait/${gender}/512/${imageNumber}.jpg`;
 
             const reviewData = {
                 ...NewReview,
@@ -125,7 +125,7 @@ const ProjectSlug = () => {
                 title: '', projectSlug: '', name: '', email: '', image: '',
                 role: "", company: "", website: "", rating: "", message: "", consent: false,
             });
-
+toast.dismiss()
             setmessageOk("✅ Testimonial published successfully");
             toast.success("✅ Testimonial published successfully");
             setTimeout(() => setmessageOk(''), 3000);
@@ -134,6 +134,7 @@ const ProjectSlug = () => {
                 commentRef.current.scrollIntoView({ behavior: 'smooth' });
             }
         } catch (error) {
+          toast.dismiss()
             toast.error("❌ Failed to publish testimonial");
         }
     };
@@ -555,7 +556,7 @@ useEffect(() => {
                   <option value="Colleague">Colleague (Teammate)</option>
                   <option value="Partner">Partner</option>
                   <option value="Professor">Professor</option>
-                  <option value="Other">Other</option>
+                  <option value="Other">Other (Eg,friends, relatives)</option>
                 </select>
                 <select
                   id="rating"
@@ -679,12 +680,13 @@ useEffect(() => {
             </ul>
           </div>
           
-          <div 
+          {
+             !loading && filterProjects.length > 0 && <div 
             className="rightrecentpost proje"
             data-aos="fade-left"
             data-aos-delay="300"
           >
-            <h2>View This (scroll up) </h2>
+            <h2>Other Projects (Check This Out) </h2>
             <div className="subrightrecentpost">
               {filterProjects.length === 0 ? (
                 <p style={{ color: 'var(--primary-color)' }}>No Current Projects</p>
@@ -724,6 +726,8 @@ useEffect(() => {
               )}
             </div>
           </div>
+          }
+          
         </div>
       </div>
                         

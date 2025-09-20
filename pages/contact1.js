@@ -766,7 +766,7 @@ const ContactPage = () => {
 
                 <form onSubmit={handleSubmit} className="leaveareplyform w-100">
                   {/* Step 1: Engagement Type */}
-                  {step === 1 && (
+                  {step === 2 && (
                     <div className="form-step">
                       <h3>What type of engagement are you interested in?</h3>
                       
@@ -847,7 +847,7 @@ const ContactPage = () => {
                   )}
 
                   {/* Step 2: Client Information */}
-                  {step === 2 && (
+                  {step === 1 && (
                     <div className="form-step">
                       <h3>Your Contact Information</h3>
                       

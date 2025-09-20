@@ -152,16 +152,23 @@ export default async function handler(req, res) {
                 updatedat = CURRENT_TIMESTAMP
             WHERE id = ${project.id}
           `;
-          await sql`
-            INSERT INTO notifications (
-              id, type, model, dataid, title, message, createddate, read, createdat, updatedat
-            )
+          try{
+              await sql`
+            INSERT INTO notifications (type, model, dataid, title, message, createddate)
             VALUES (
-              ${uuidv4()}, 'add', 'Review', ${reviewId}, 'New Review Added',
-              ${`Review added for project: ${project.title}`}, CURRENT_TIMESTAMP, FALSE,
-              CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+              'add',
+              'Comment',
+              ${reviewId},
+              'Review Submission Noted',
+              ${`User ${name} (email: ${email}) submitted a review (rating: ${rating}) for project "${project.title}" via our website on ${formatDate(new Date())}. Content: "${message}". Incorporate into performance metrics and initiate response protocols as necessary.`},
+              CURRENT_TIMESTAMP
             )
           `;
+        }
+        catch(error){
+  return res.status(404).json({ message: "Failed to create notification " });
+
+        }
           return res.status(201).json(newReview);
         } else {
           const [check] = await sql`

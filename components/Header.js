@@ -11,7 +11,9 @@ export default function Header({ state, setState }) {
   const [dark, setDark] = useState(false);
   const [activeLink, setActiveLink] = useState("/");
   const [isVisible, setIsVisible] = useState(false);
-
+setTimeout(() => {
+   toast.dismiss();
+}, 3000);
   useEffect(() => {
     const toggleVisibility = () => {
       if (window.pageYOffset > 60) {

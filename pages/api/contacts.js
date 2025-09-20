@@ -1,12 +1,24 @@
 import { mongooseConnect } from "@/lib/mongoose";
 import { Contact } from "@/models/contact";
 const nodemailer = require('nodemailer');
-
-
+import { neon } from '@neondatabase/serverless';
+import { v4 as uuidv4 } from 'uuid';
+const sql = neon('postgresql://neondb_owner:npg_P6GLxeoWFS5u@ep-curly-heart-ae2jb0gb-pooler.c-2.us-east-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require'); // Use process.env.DATABASE_URL if needed
+const formatDate = (date) => {
+  if (!date || isNaN(date)) {
+    return '';
+  }
+  const options = {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour12: true
+  };
+  return new Intl.DateTimeFormat('en-US', options).format(date);
+};
 
 export default async function handlecont(req, res) {
 
-    await mongooseConnect();
     const {method} = req;
 // Email configuration
 const transporter = nodemailer.createTransport({
@@ -23,309 +35,6 @@ const transporter = nodemailer.createTransport({
     // Clear the collection before inserting new data;
 
     try {
-//          const mailOptions = {
-//     from: '"Nfas Thinker | Digital Solutions" <nfasthinker@gmail.com>',
-//     to: req.body.clientInfo.email,
-//     subject: `Thank You for Your Inquiry, ${req.body.clientInfo.firstName}!`,
-//     html: `
-//     <!DOCTYPE html>
-//     <html lang="en">
-//     <head>
-//         <meta charset="UTF-8">
-//         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-//         <title>Your Project Inquiry</title>
-//         <style>
-//             @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
-//             body { font-family: 'Poppins', Arial, sans-serif; line-height: 1.6; color: #333333; margin: 0; padding: 0; background-color: #f7f9fc; }
-//             .container { max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); }
-//             .header { background: linear-gradient(135deg, #0066ff 0%, #0033aa 100%); padding: 30px; text-align: center; color: white; }
-//             .content { padding: 30px; }
-//             .footer { background: #f5f7fa; padding: 20px; text-align: center; font-size: 12px; color: #666666; }
-//             .logo { font-size: 24px; font-weight: 700; margin-bottom: 10px; }
-//             .project-details { background: #f9f9f9; border-radius: 6px; padding: 20px; margin: 20px 0; }
-//             .project-details h3 { margin-top: 0; color: #0066ff; }
-//             .project-details p { margin: 5px 0; }
-//             .btn-primary { display: inline-block; padding: 12px 24px; background: #0066ff; color: white; text-decoration: none; border-radius: 4px; font-weight: 500; margin: 15px 0; }
-//             .signature { margin-top: 30px; }
-//             .highlight { color: #0066ff; font-weight: 600; }
-//         </style>
-//     </head>
-//     <body>
-//         <div class="container">
-//             <div class="header">
-//                 <div class="logo">NFAS THINKER</div>
-//                 <h1>Thank You for Choosing Us</h1>
-//                 <p>We're excited to work with you on your ${req.body.serviceSelection.websiteDetails.type} project!</p>
-//             </div>
-
-//             <div class="content">
-//                 <h2>Dear ${req.body.clientInfo.firstName} ${req.body.clientInfo.lastName},</h2>
-
-//                 <p>Thank you for reaching out to us regarding your <span class="highlight">${req.body.serviceSelection.websiteDetails.type} website development</span> project. We've carefully reviewed your requirements and are thrilled about the opportunity to bring your vision to life.</p>
-
-//                 <div class="project-details">
-//                     <h3>Your Project Summary</h3>
-//                     <p><strong>Project Type:</strong> ${req.body.serviceSelection.websiteDetails.type} Website</p>
-//                     <p><strong>Budget Range:</strong> ${req.body.projectInfo.budgetRange}</p>
-//                     <p><strong>Timeline:</strong> ${new Date(req.body.projectInfo.startDate).toLocaleDateString()} to ${new Date(req.body.projectInfo.deadline).toLocaleDateString()}</p>
-//                     <p><strong>Urgency:</strong> ${req.body.projectInfo.urgency}</p>
-
-//                     <h4 style="margin-top: 20px;">Included Pages:</h4>
-//                     <ul>
-//                         ${req.body.serviceSelection.websiteDetails.defaultPages.map(page => `<li>${page}</li>`).join('')}
-//                     </ul>
-
-//                     ${req.body.serviceSelection.websiteDetails.additionalPages.length > 0 ? `
-//                     <h4>Additional Pages Selected:</h4>
-//                     <ul>
-//                         ${req.body.serviceSelection.websiteDetails.additionalPages.map(page => `<li>${page}</li>`).join('')}
-//                     </ul>
-//                     ` : ''}
-//                 </div>
-
-//                 <p>Your notes about <em>"${req.body.projectInfo.notes}"</em> particularly resonated with us. We share your passion for creating elegant solutions to complex challenges.</p>
-
-//                 <p><strong>Next Steps:</strong></p>
-//                 <ol>
-//                     <li>Our team will review your requirements in detail within 24 hours</li>
-//                     <li>We'll schedule a ${req.body.clientInfo.contactMethod} call at your convenience</li>
-//                     <li>You'll receive a detailed proposal with timeline and deliverables</li>
-//                 </ol>
-
-//                 <a href="https://calendly.com/nfasthinker/consultation" class="btn-primary">Schedule a Consultation Call</a>
-
-//                 <div class="signature">
-//                     <p>Warm regards,</p>
-//                     <p><strong>Nfas Thinker</strong></p>
-//                     <p>Founder & Lead Developer</p>
-//                     <p>NFAS Thinker Digital Solutions</p>
-//                     <p>Phone: +1 (555) 123-4567</p>
-//                     <p>Email: nfasthinker@gmail.com</p>
-//                 </div>
-//             </div>
-
-//             <div class="footer">
-//                 <p>© ${new Date().getFullYear()} NFAS Thinker Digital Solutions. All rights reserved.</p>
-//                 <p>Cameroon, Douala | www.nfasthinker.com</p>
-//                 <p><a href="#" style="color: #0066ff; text-decoration: none;">Privacy Policy</a> | <a href="#" style="color: #0066ff; text-decoration: none;">Terms of Service</a></p>
-//             </div>
-//         </div>
-//     </body>
-//     </html>
-//     `
-// };
-
-// const mailOptions = {
-//   from: `"NFAS Thinker | Digital Excellence" <nfasthinker@gmail.com>`,
-//   to: req.body.clientInfo.email,
-//   subject: `Project Confirmation: ${req.body.clientInfo.company} ${req.body.serviceSelection.websiteDetails.type} Website`,
-//   html: `
-//   <!DOCTYPE html>
-//   <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml">
-//   <head>
-//     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-//     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-//     <meta name="format-detection" content="telephone=no">
-//     <title>Your Vision, Our Expertise</title>
-//     <style type="text/css">
-//       /* Client-specific styles */
-//       body, table, td, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
-//       body { margin: 0 !important; padding: 0 !important; width: 100% !important; background: #f8f9fa; }
-//       .ExternalClass { width: 100%; }
-//       .ExternalClass, .ExternalClass p, .ExternalClass span, .ExternalClass font, .ExternalClass td, .ExternalClass div { line-height: 100%; }
-
-//       /* Modern typography */
-//       body { font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; color: #212529; line-height: 1.6; }
-//       h1, h2, h3 { color: #1a1a1a; font-weight: 600; margin-top: 0; }
-
-//       /* Layout */
-//       .email-container { max-width: 600px; margin: 0 auto; background: #ffffff; }
-//       .header { background: linear-gradient(135deg, #0d47a1 0%, #1976d2 100%); padding: 40px 30px; text-align: center; color: white; }
-//       .content { padding: 40px 30px; }
-//       .footer { background: #2c3e50; color: #ecf0f1; padding: 30px; text-align: center; font-size: 13px; }
-
-//       /* Components */
-//       .project-card { border-left: 4px solid #1976d2; background: #f8f9fa; padding: 25px; margin: 25px 0; border-radius: 0 4px 4px 0; }
-//       .timeline-bar { height: 6px; background: #e9ecef; border-radius: 3px; margin: 20px 0; position: relative; }
-//       .timeline-progress { height: 100%; background: linear-gradient(90deg, #1976d2 0%, #4fc3f7 100%); border-radius: 3px; width: 33%; }
-//       .feature-badge { display: inline-block; background: #e3f2fd; color: #1976d2; padding: 5px 10px; border-radius: 20px; font-size: 12px; margin-right: 8px; margin-bottom: 8px; }
-//       .divider { height: 1px; background: linear-gradient(90deg, rgba(25,118,210,0) 0%, rgba(25,118,210,0.5) 50%, rgba(25,118,210,0) 100%); margin: 30px 0; }
-
-//       /* Buttons */
-//       .btn { display: inline-block; padding: 14px 28px; background: #1976d2; color: white !important; text-decoration: none; border-radius: 4px; font-weight: 600; text-align: center; }
-//       .btn-outline { background: transparent; border: 2px solid #1976d2; color: #1976d2 !important; }
-
-//       /* Responsive */
-//       @media screen and (max-width: 600px) {
-//         .header, .content, .footer { padding: 25px 20px !important; }
-//         .project-card { padding: 20px !important; }
-//       }
-//     </style>
-//   </head>
-//   <body>
-//     <!-- Email Container -->
-//     <div class="email-container">
-//       <!-- Header with Gradient -->
-//       <div class="header">
-//         <table width="100%" border="0" cellspacing="0" cellpadding="0">
-//           <tr>
-//             <td align="center">
-//               <img src="https://yourdomain.com/logo-white.png" alt="NFAS Thinker Logo" width="180" style="max-width:180px; height:auto; display:block;">
-//               <h1 style="margin:20px 0 10px; font-size:28px;">Project Initiation Confirmation</h1>
-//               <p style="margin:0; font-size:16px; opacity:0.9;">${req.body.clientInfo.company} • ${req.body.serviceSelection.websiteDetails.type} Website</p>
-//             </td>
-//           </tr>
-//         </table>
-//       </div>
-
-//       <!-- Main Content -->
-//       <div class="content">
-//         <!-- Personalized Greeting -->
-//         <h2 style="margin-bottom:5px;">Dear ${req.body.clientInfo.firstName},</h2>
-//         <p style="margin-top:0;">Thank you for entrusting NFAS Thinker with your vision. We're honored to collaborate on your <strong>${req.body.serviceSelection.websiteDetails.type} website</strong> project and have prepared this comprehensive confirmation.</p>
-
-//         <!-- Project Timeline Visual -->
-//         <div style="margin:30px 0;">
-//           <p style="margin-bottom:8px; font-weight:500; color:#6c757d;">PROJECT TIMELINE</p>
-//           <div class="timeline-bar">
-//             <div class="timeline-progress"></div>
-//           </div>
-//           <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top:10px;">
-//             <tr>
-//               <td style="width:33%; text-align:left; font-size:12px; color:#6c757d;">Initiation<br>${new Date(req.body.projectInfo.startDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</td>
-//               <td style="width:33%; text-align:center; font-size:12px; color:#6c757d;">Development</td>
-//               <td style="width:33%; text-align:right; font-size:12px; color:#6c757d;">Delivery<br>${new Date(req.body.projectInfo.deadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</td>
-//             </tr>
-//           </table>
-//         </div>
-
-//         <!-- Project Details Card -->
-//         <div class="project-card">
-//           <h3 style="margin-top:0; color:#1976d2;">Project Specifications</h3>
-
-//           <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin:15px 0;">
-//             <tr>
-//               <td width="40%" style="padding-bottom:10px; color:#6c757d;">Project Type:</td>
-//               <td width="60%" style="padding-bottom:10px; font-weight:500;">${req.body.serviceSelection.websiteDetails.type} Website</td>
-//             </tr>
-//             <tr>
-//               <td style="padding-bottom:10px; color:#6c757d;">Budget Range:</td>
-//               <td style="padding-bottom:10px; font-weight:500;">${req.body.projectInfo.budgetRange}</td>
-//             </tr>
-//             <tr>
-//               <td style="padding-bottom:10px; color:#6c757d;">Urgency Level:</td>
-//               <td style="padding-bottom:10px; font-weight:500;">${req.body.projectInfo.urgency}</td>
-//             </tr>
-//             <tr>
-//               <td style="padding-bottom:10px; color:#6c757d;">Contact Method:</td>
-//               <td style="padding-bottom:10px; font-weight:500;">${req.body.clientInfo.contactMethod}</td>
-//             </tr>
-//           </table>
-
-//           <p style="margin-bottom:5px; color:#6c757d;">Core Pages Included:</p>
-//           <div style="margin-bottom:15px;">
-//             ${req.body.serviceSelection.websiteDetails.defaultPages.map(page => `
-//               <span class="feature-badge">${page}</span>
-//             `).join('')}
-//           </div>
-
-//           ${req.body.serviceSelection.websiteDetails.additionalPages.length > 0 ? `
-//           <p style="margin-bottom:5px; color:#6c757d;">Premium Add-ons Selected:</p>
-//           <div>
-//             ${req.body.serviceSelection.websiteDetails.additionalPages.map(page => `
-//               <span class="feature-badge" style="background:#e8f5e9; color:#2e7d32;">${page}</span>
-//             `).join('')}
-//           </div>
-//           ` : ''}
-//         </div>
-
-//         <!-- Client's Vision -->
-//         <div style="background:#fff8e1; padding:20px; border-radius:4px; margin:25px 0;">
-//           <h3 style="margin-top:0; color:#ff8f00;">Your Vision</h3>
-//           <p style="font-style:italic; margin-bottom:0;">"${req.body.projectInfo.notes}"</p>
-//         </div>
-
-//         <!-- Next Steps -->
-//         <h3>Next Steps</h3>
-//         <ol style="margin-top:15px; padding-left:20px;">
-//           <li style="margin-bottom:10px;"><strong>Project Kickoff:</strong> Our team will conduct an in-depth analysis within 24-48 hours</li>
-//           <li style="margin-bottom:10px;"><strong>Discovery Call:</strong> We'll schedule a ${req.body.clientInfo.contactMethod} consultation at your convenience</li>
-//           <li style="margin-bottom:10px;"><strong>Proposal Delivery:</strong> You'll receive a detailed project blueprint with milestones and deliverables</li>
-//         </ol>
-
-//         <!-- CTA Buttons -->
-//         <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin:30px 0;">
-//           <tr>
-//             <td align="center">
-//               <table border="0" cellspacing="0" cellpadding="0">
-//                 <tr>
-//                   <td align="center" style="padding:0 10px;">
-//                     <a href="https://calendly.com/nfasthinker/consultation" class="btn">Schedule Discovery Call</a>
-//                   </td>
-//                   <td align="center" style="padding:0 10px;">
-//                     <a href="https://nfasthinker.com/client-portal" class="btn btn-outline">Access Client Portal</a>
-//                   </td>
-//                 </tr>
-//               </table>
-//             </td>
-//           </tr>
-//         </table>
-
-//         <!-- Divider -->
-//         <div class="divider"></div>
-
-//         <!-- Signature -->
-//         <table width="100%" border="0" cellspacing="0" cellpadding="0">
-//           <tr>
-//             <td style="width:80px; padding-right:20px;">
-//               <img src="https://yourdomain.com/signature-photo.jpg" alt="Nfas Thinker" width="80" style="border-radius:50%; display:block;">
-//             </td>
-//             <td>
-//               <p style="margin:0 0 5px; font-weight:600;">Nfas Thinker</p>
-//               <p style="margin:0 0 5px; color:#6c757d; font-size:14px;">Founder & Principal Architect</p>
-//               <p style="margin:0; color:#6c757d; font-size:14px;">NFAS Thinker Digital Solutions</p>
-//             </td>
-//           </tr>
-//         </table>
-//       </div>
-
-//       <!-- Footer -->
-//       <div class="footer">
-//         <table width="100%" border="0" cellspacing="0" cellpadding="0">
-//           <tr>
-//             <td align="center" style="padding-bottom:15px;">
-//               <img src="https://yourdomain.com/logo-icon-white.png" alt="NFAS Thinker" width="40" style="opacity:0.8;">
-//             </td>
-//           </tr>
-//           <tr>
-//             <td align="center" style="padding-bottom:15px;">
-//               <p style="margin:0; font-size:12px; color:#bdc3c7;">Transforming complex challenges into elegant digital solutions</p>
-//             </td>
-//           </tr>
-//           <tr>
-//             <td align="center" style="padding-bottom:20px;">
-//               <a href="#" style="margin:0 10px;"><img src="https://yourdomain.com/social-twitter.png" width="24" alt="Twitter"></a>
-//               <a href="#" style="margin:0 10px;"><img src="https://yourdomain.com/social-linkedin.png" width="24" alt="LinkedIn"></a>
-//               <a href="#" style="margin:0 10px;"><img src="https://yourdomain.com/social-github.png" width="24" alt="GitHub"></a>
-//             </td>
-//           </tr>
-//           <tr>
-//             <td align="center" style="padding-bottom:5px;">
-//               <p style="margin:0; font-size:11px;">© ${new Date().getFullYear()} NFAS Thinker Digital Solutions. All rights reserved.</p>
-//             </td>
-//           </tr>
-//           <tr>
-//             <td align="center">
-//               <p style="margin:0; font-size:11px;">Douala, Cameroon | <a href="https://nfasthinker.com" style="color:#ecf0f1; text-decoration:none;">www.nfasthinker.com</a></p>
-//             </td>
-//           </tr>
-//         </table>
-//       </div>
-//     </div>
-//   </body>
-//   </html>
-//   `
-// };
 
 const mailOptions = {
   from: `"MYGL Tech | Digital Solutions"  <nfasthinker@gmail.com>`,
@@ -712,277 +421,6 @@ function generateEmailHtml(formData) {
 </body>
 </html>`;
 }
-// function generateEmailSubject(formData) {
-//   if (formData.engagementType === 'project') {
-//     return `${formData.clientInfo.company ? formData.clientInfo.company + ' ' : ''}${formData.serviceSelection.serviceType} Project Confirmation`;
-//   } else {
-//     return `Employment Opportunity: ${formData.serviceSelection.employmentDetails.jobTitle || 'Role'} Discussion`;
-//   }
-// }
-
-// // Master Email Generator
-// function generateEmailHtml(formData) {
-//   const isProject = formData.engagementType === 'project';
-//   const serviceType = formData.serviceSelection.serviceType;
-//   //const projectType = isProject ? formData.serviceSelection[`${serviceType.toLowerCase().replace(' ', '')}Details`]?.type : null;
-// console.log("{generateEmailHtml formData}", {formData})
-//   return `<!DOCTYPE html>
-//   <html xmlns="http://www.w3.org/1999/xhtml">
-//   <head>
-//     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-//     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-//     <title>${generateEmailSubject(formData)}</title>
-//     <style>
-//       /* [Previous CSS remains exactly the same] */
-//     </style>
-//   </head>
-//   <body>
-//     <div class="email-container">
-//       <!-- Dynamic Header -->
-//       <div class="header">
-//         <table width="100%" border="0" cellspacing="0" cellpadding="0">
-//           <tr>
-//             <td align="center">
-//               <img src="https://yourdomain.com/logo-white.png" alt="NFAS Thinker Logo" width="180">
-//               <h1>${isProject ? 'Project Confirmation' : 'Employment Inquiry'}</h1>
-//               <p>${generateHeaderSubtitle(formData)}</p>
-//             </td>
-//           </tr>
-//         </table>
-//       </div>
-
-//       <div class="content">
-//         <!-- Personalized Greeting -->
-//         <h2>Sender ${formData.clientInfo.firstName} ${formData.clientInfo.lastName},</h2>
-//         <p>${generateOpeningParagraph(formData)}</p>
-
-//         ${
-//          isProject ? generateProjectDetails(formData) : generateEmploymentDetails(formData)
-//         }
-
-//         ${formData.projectInfo.notes ? `
-//         <div style="background:#fff8e1; padding:20px; border-radius:4px; margin:25px 0;">
-//           <h3 style="margin-top:0; color:#ff8f00;">${isProject ? 'Your Vision' : 'Opportunity Details'}</h3>
-//           <p style="font-style:italic; margin-bottom:0;">"${formData.projectInfo.notes}"</p>
-//         </div>
-//         ` : ''}
-
-//         <!-- Next Steps -->
-//         <h3>Next Steps</h3>
-//         <ol style="margin-top:15px; padding-left:20px;">
-//           ${generateNextSteps(formData).map(step => `<li style="margin-bottom:10px;">${step}</li>`).join('')}
-//         </ol>
-
-//         <!-- CTA Buttons -->
-//         <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin:30px 0;">
-//           <tr>
-//             <td align="center">
-//               <table border="0" cellspacing="0" cellpadding="0">
-//                 <tr>
-//                   <td align="center" style="padding:0 10px;">
-//                     <a href="https://calendly.com/nfasthinker/consultation" class="btn">
-//                       ${isProject ? 'Schedule Discovery Call' : 'Schedule Interview'}
-//                     </a>
-//                   </td>
-//                   <td align="center" style="padding:0 10px;">
-//                     <a href="https://nfasthinker.com/client-portal" class="btn btn-outline">
-//                       ${isProject ? 'Access Client Portal' : 'View Open Positions'}
-//                     </a>
-//                   </td>
-//                 </tr>
-//               </table>
-//             </td>
-//           </tr>
-//         </table>
-
-//         <!-- Signature -->
-//         <div class="divider"></div>
-//         ${generateSignature()}
-//       </div>
-
-//       <!-- Footer -->
-//       ${generateFooter()}
-//     </div>
-//   </body>
-//   </html>`;
-// }
-
-// // Helper Functions
-// function generateHeaderSubtitle(formData) {
-//   if (formData.engagementType === 'project') {
-//     const service = formData.serviceSelection.serviceType;
-//     const type = formData.serviceSelection[`${service.toLowerCase().replace(' ', '')}Details`]?.type;
-//     return `${formData.clientInfo.company || ''}${formData.clientInfo.company ? ' • ' : ''}${type ? type + ' ' : ''}${service}`;
-//   } else {
-//     return `Employment Opportunity • ${formData.serviceSelection.employmentDetails.jobTitle || 'Role'}`;
-//   }
-// }
-
-// function generateOpeningParagraph(formData) {
-//   if (formData.engagementType === 'project') {
-//     const service = formData.serviceSelection.serviceType;
-//     return `Thank you for entrusting NFAS Thinker with your ${service} project. We're excited to collaborate on your vision and have prepared this comprehensive confirmation.`;
-//   } else {
-//     return `Thank you for considering me for the ${formData.serviceSelection.employmentDetails.jobTitle || ''} position. I'm honored by the opportunity and have reviewed the details you provided.`;
-//   }
-// }
-
-// function generateProjectDetails(formData) {
-//   const service = formData.serviceSelection.serviceType;
-//   const ServiceType = service.split(" ")[0];
-//   const details = formData.serviceSelection[`${service.toLowerCase().split(" ")[0]}Details`];
-// console.log("{Service details}", {formData, service, details})
-//   return `
-//   <!-- Project Timeline -->
-//   <div style="margin:30px 0;">
-//     <p style="margin-bottom:8px; font-weight:500; color:#6c757d;">PROJECT TIMELINE</p>
-//     <div class="timeline-bar">
-//       <div class="timeline-progress"></div>
-//     </div>
-//     <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top:10px;">
-//       <tr>
-//         <td style="width:33%; text-align:left; font-size:12px; color:#6c757d;">
-//           Initiation<br>${new Date(formData.projectInfo.startDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-//         </td>
-//         <td style="width:33%; text-align:center; font-size:12px; color:#6c757d;">Development</td>
-//         <td style="width:33%; text-align:right; font-size:12px; color:#6c757d;">
-//           Delivery<br>${new Date(formData.projectInfo.deadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-//         </td>
-//       </tr>
-//     </table>
-//   </div>
-
-//   <!-- Project Details Card -->
-//   <div class="project-card">
-//     <h3 style="margin-top:0; color:#1976d2;">Project Specifications</h3>
-
-//     <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin:15px 0;">
-//       <tr>
-//         <td width="40%" style="padding-bottom:10px; color:#6c757d;">Service Type:</td>
-//         <td width="60%" style="padding-bottom:10px; font-weight:500;">${service}</td>
-//       </tr>
-//       ${details.type ? `
-//       <tr>
-//         <td style="padding-bottom:10px; color:#6c757d;">${service.includes('Website') ? 'Website' : 'Application'} Type:</td>
-//         <td style="padding-bottom:10px; font-weight:500;">${details.type}</td>
-//       </tr>
-//       ` : ''}
-//       <tr>
-//         <td style="padding-bottom:10px; color:#6c757d;">Budget Range:</td>
-//         <td style="padding-bottom:10px; font-weight:500;">${formData.projectInfo.budgetRange}</td>
-//       </tr>
-//       <tr>
-//         <td style="padding-bottom:10px; color:#6c757d;">Urgency Level:</td>
-//         <td style="padding-bottom:10px; font-weight:500;">${formData.projectInfo.urgency}</td>
-//       </tr>
-//       <tr>
-//         <td style="padding-bottom:10px; color:#6c757d;">Contact Method:</td>
-//         <td style="padding-bottom:10px; font-weight:500;">${formData.clientInfo.contactMethod}</td>
-//       </tr>
-//     </table>
-
-//     ${generateFeaturesSection(formData, service, details)}
-//   </div>`;
-// }
-
-// function generateFeaturesSection(formData, service, details) {
-//   const featureType = service.includes('Website') ? 'Pages' : 'Screens';
-//   const defaultFeatures = details.defaultPages || details.defaultScreens || [];
-//   const additionalFeatures = details.additionalPages || details.additionalScreens || [];
-
-//   return `
-//   ${defaultFeatures.length > 0 ? `
-//   <p style="margin-bottom:5px; color:#6c757d;">Core ${featureType} Included:</p>
-//   <div style="margin-bottom:15px;">
-//     ${defaultFeatures.map(item => `
-//       <span class="feature-badge">${item}</span>
-//     `).join('')}
-//   </div>
-//   ` : ''}
-
-//   ${additionalFeatures.length > 0 ? `
-//   <p style="margin-bottom:5px; color:#6c757d;">Premium Add-ons Selected:</p>
-//   <div>
-//     ${additionalFeatures.map(item => `
-//       <span class="feature-badge" style="background:#e8f5e9; color:#2e7d32;">${item}</span>
-//     `).join('')}
-//   </div>
-//   ` : ''}
-
-//   ${details.needs && details.needs.length > 0 ? `
-//   <p style="margin-bottom:5px; color:#6c757d;">Technical Requirements:</p>
-//   <div>
-//     ${details.needs.map(item => `
-//       <span class="feature-badge" style="background:#e3f2fd; color:#1976d2;">${item}</span>
-//     `).join('')}
-//   </div>
-//   ` : ''}`;
-// }
-
-// function generateEmploymentDetails(formData) {
-//   const details = formData.serviceSelection.employmentDetails;
-
-//   return `
-//   <div class="project-card">
-//     <h3 style="margin-top:0; color:#1976d2;">Opportunity Details</h3>
-
-//     <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin:15px 0;">
-//       ${details.jobTitle ? `
-//       <tr>
-//         <td width="40%" style="padding-bottom:10px; color:#6c757d;">Position Title:</td>
-//         <td width="60%" style="padding-bottom:10px; font-weight:500;">${details.jobTitle}</td>
-//       </tr>
-//       ` : ''}
-
-//       ${details.roleType ? `
-//       <tr>
-//         <td style="padding-bottom:10px; color:#6c757d;">Employment Type:</td>
-//         <td style="padding-bottom:10px; font-weight:500;">${details.roleType}</td>
-//       </tr>
-//       ` : ''}
-
-//       ${details.industry ? `
-//       <tr>
-//         <td style="padding-bottom:10px; color:#6c757d;">Industry:</td>
-//         <td style="padding-bottom:10px; font-weight:500;">${details.industry}</td>
-//       </tr>
-//       ` : ''}
-
-//       ${details.salaryExpectation ? `
-//       <tr>
-//         <td style="padding-bottom:10px; color:#6c757d;">Compensation:</td>
-//         <td style="padding-bottom:10px; font-weight:500;">${details.salaryExpectation}</td>
-//       </tr>
-//       ` : ''}
-
-//       <tr>
-//         <td style="padding-bottom:10px; color:#6c757d;">Contact Method:</td>
-//         <td style="padding-bottom:10px; font-weight:500;">${formData.clientInfo.contactMethod}</td>
-//       </tr>
-//     </table>
-
-//     ${details.jobDescription ? `
-//     <p style="margin-bottom:5px; color:#6c757d;">Position Overview:</p>
-//     <p>${details.jobDescription}</p>
-//     ` : ''}
-//   </div>`;
-// }
-
-// function generateNextSteps(formData) {
-//   if (formData.engagementType === 'project') {
-//     return [
-//       `Our team will conduct an in-depth analysis within 24-48 hours`,
-//       `We'll schedule a ${formData.clientInfo.contactMethod} consultation at your convenience`,
-//       `You'll receive a detailed project blueprint with milestones and deliverables`
-//     ];
-//   } else {
-//     return [
-//       `I will review the opportunity details and my qualifications`,
-//       `We'll schedule a ${formData.clientInfo.contactMethod} discussion at your convenience`,
-//       `You'll receive my formal response and availability timeline`
-//     ];
-//   }
-// }
 
 // function generateSignature() {
 //   return `
@@ -1025,25 +463,7 @@ function generateEmailHtml(formData) {
 //         <td align="center" style="padding-bottom:5px;">
 //           <p style="margin:0; font-size:11px;">© ${new Date().getFullYear()} NFAS Thinker Digital Solutions. All rights reserved.</p>
 //         </td>
-//       </tr>
-//       <tr>
-//         <td align="center">
-//           <p style="margin:0; font-size:11px;">Douala, Cameroon | <a href="https://nfasthinker.com" style="color:#ecf0f1; text-decoration:none;">www.nfasthinker.com</a></p>
-//         </td>
-//       </tr>
-//     </table>
-//   </div>`;
-// }
-try {
-   
-   
-} catch (error) {
-          console.log(" error ContactInforb error", error);
-        return res.json({
-            success: false,
-            data: error,
-        })
-}
+
 
      const sender =  await transporter.sendMail(mailOptions);
    
@@ -1057,13 +477,166 @@ try {
      }
     else {
         
-      res.json({ success: true, message: 'Contact email sent successfully' });
-     const ContactInfor = await Contact.create(req.body);
-     console.log("ContactInfor", ContactInfor);
+
+       const {
+        clientInfo: {
+          firstName,
+          lastName,
+          profilePicture,
+          email,
+          phone,
+          company,
+          country,
+          referralSource,
+          contactMethod
+        },
+        engagementType,
+        serviceSelection: {
+          serviceType,
+          websiteDetails: {
+            type: websiteType,
+            customDescription: websiteDescription,
+            defaultPages,
+            additionalPages
+          },
+          appDetails: {
+            type: appType,
+            customDescription: appDescription,
+            defaultScreens,
+            additionalScreens
+          },
+          designDetails: {
+            type: designType,
+            customDescription: designDescription
+          },
+          databaseDetails: { needs: databaseNeeds },
+          telecomDetails: {
+            needs: telecomNeeds,
+            customDescription: telecomDescription
+          },
+          employmentDetails: {
+            roleType,
+            jobTitle,
+            industry,
+            salaryExpectation,
+            jobDescription
+          }
+        },
+        projectInfo: {
+          startDate,
+          deadline,
+          budgetRange,
+          notes,
+          urgency
+        }
+      } = req.body;
+  
+      const contactId = uuidv4();
+      const createdAt = new Date();
+      const updatedAt = new Date();
+
+      await sql`
+        INSERT INTO contacts (
+          id, first_name, last_name, email, phone, company, country, notes, budget_range,
+          engagement_type, profile_picture, referral_source, contact_method, service_type,
+          website_type, website_description, website_default_pages, website_additional_pages,
+          app_type, app_description, app_default_screens, app_additional_screens,
+          design_type, design_description, database_needs, telecom_needs, telecom_description,
+          employment_role_type, employment_job_title, employment_industry,
+          employment_salary_expectation, employment_job_description, start_date, deadline,
+          urgency, createdat, updatedat
+        )
+        VALUES (
+          ${contactId}, ${firstName}, ${lastName}, ${email}, ${phone}, ${company}, ${country},
+          ${notes}, ${budgetRange}, ${engagementType}, ${profilePicture}, ${referralSource},
+          ${contactMethod}, ${serviceType}, ${websiteType}, ${websiteDescription},
+          ${JSON.stringify(defaultPages)}, ${JSON.stringify(additionalPages)}, ${appType},
+          ${appDescription}, ${JSON.stringify(defaultScreens)}, ${JSON.stringify(additionalScreens)},
+          ${designType}, ${designDescription}, ${JSON.stringify(databaseNeeds)},
+          ${JSON.stringify(telecomNeeds)}, ${telecomDescription}, ${roleType}, ${jobTitle},
+          ${industry}, ${salaryExpectation}, ${jobDescription}, ${startDate}, ${deadline},
+          ${urgency}, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+        )
+      `;
+
+      const [newContact] = await sql`SELECT * FROM contacts WHERE id = ${contactId}`;
+     await sql`
+        INSERT INTO notifications (
+        type, model, dataid, title, message, createddate, read, createdat, updatedat
+        )
+        VALUES (
+          'add', 'Contact', ${contactId}, 'Contact Inquiry Received',
+          ${`User ${firstName}, ${lastName} (email: ${email}, phone: ${phone}) submitted a contact inquiry the website on ${formatDate(new Date())}. Reply Method: "${contactMethod}", Service Type: "${serviceType}", Engagement Type: "${engagementType}". Allocate resources for response to optimize opportunity conversion`},
+           CURRENT_TIMESTAMP, FALSE,
+          CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+        )
+      `;
+
+      const ContactInfor = {
+        _id: newContact.id,
+        clientInfo: {
+          firstName: newContact.first_name,
+          lastName: newContact.last_name,
+          profilePicture: newContact.profile_picture,
+          email: newContact.email,
+          phone: newContact.phone,
+          company: newContact.company,
+          country: newContact.country,
+          referralSource: newContact.referral_source,
+          contactMethod: newContact.contact_method
+        },
+        engagementType: newContact.engagement_type,
+        serviceSelection: {
+          serviceType: newContact.service_type,
+          websiteDetails: {
+            type: newContact.website_type,
+            customDescription: newContact.website_description,
+            defaultPages: newContact.website_default_pages,
+            additionalPages: newContact.website_additional_pages
+          },
+          appDetails: {
+            type: newContact.app_type,
+            customDescription: newContact.app_description,
+            defaultScreens: newContact.app_default_screens,
+            additionalScreens: newContact.app_additional_screens
+          },
+          designDetails: {
+            type: newContact.design_type,
+            customDescription: newContact.design_description
+          },
+          databaseDetails: {
+            needs: newContact.database_needs
+          },
+          telecomDetails: {
+            needs: newContact.telecom_needs,
+            customDescription: newContact.telecom_description
+          },
+          employmentDetails: {
+            roleType: newContact.employment_role_type,
+            jobTitle: newContact.employment_job_title,
+            industry: newContact.employment_industry,
+            salaryExpectation: newContact.employment_salary_expectation,
+            jobDescription: newContact.employment_job_description
+          }
+        },
+        projectInfo: {
+          startDate: newContact.start_date,
+          deadline: newContact.deadline,
+          budgetRange: newContact.budget_range,
+          notes: newContact.notes,
+          urgency: newContact.urgency
+        },
+        createdAt: newContact.createdat,
+        updatedAt: newContact.updatedat
+      };
+
+      console.log("ContactInfor", ContactInfor);
+  
 
      return res.json({
             success: true,
             data: ContactInfor,
+            message: 'Contact email sent successfully'
         })
 
 
@@ -1085,79 +658,81 @@ try {
 
 
 
-    } else if (method === "GET") {
-          if (req.query?.id) {
-            const blogDoc = await Contact.findById(req.query?.id);
-
-            if (blogDoc) {
-                return res.json({
-                    success: true,
-                    data: blogDoc,
-                    message: ""
-                })
-            }
-         else{
-            return res.json({
-                success: false,
-                data: null,
-                message: "failed to get blog document, verify blog id"
-            })
-         }
-
-          } else {
-
-            const Doc = (await Contact.find()).reverse();
-
-            return res.json({
-                success: true,
-                 data: Doc,
-                 message: ""
-            })
-
-          }
     }
+//      else if (method === "GET") {
+//           if (req.query?.id) {
+//             const blogDoc = await Contact.findById(req.query?.id);
 
-    else if (method === "PUT"){
-        const {_id,  name, lname, email, price, company, country, description, phone, project} = req.body;
-        if (!_id) {
-            return res.json({
-                success: false,
-                message: "Error! _Id Missing",
+//             if (blogDoc) {
+//                 return res.json({
+//                     success: true,
+//                     data: blogDoc,
+//                     message: ""
+//                 })
+//             }
+//          else{
+//             return res.json({
+//                 success: false,
+//                 data: null,
+//                 message: "failed to get blog document, verify blog id"
+//             })
+//          }
 
-            })
-        }
-        else{
-            await Contact.updateOne({_id}, {
-                name, lname, email, price, company, country, description, phone, project
-            })
+//           } else {
 
-            return res.json({
-                success: true,
-                message: "_Id Missing",
+//             const Doc = (await Contact.find()).reverse();
 
-            })
-        }
-    }
+//             return res.json({
+//                 success: true,
+//                  data: Doc,
+//                  message: ""
+//             })
 
-    else if (method === "DELETE"){
-        if (req.query?.id) {
-            await Contact.deleteOne(req.query?.id);
+//           }
+//     }
 
-            return res.json({
-                success: true,
-                message: "",
+//     else if (method === "PUT"){
+//         const {_id,  name, lname, email, price, company, country, description, phone, project} = req.body;
+//         if (!_id) {
+//             return res.json({
+//                 success: false,
+//                 message: "Error! _Id Missing",
 
-            })
+//             })
+//         }
+//         else{
+//             await Contact.updateOne({_id}, {
+//                 name, lname, email, price, company, country, description, phone, project
+//             })
 
-          } else {
+//             return res.json({
+//                 success: true,
+//                 message: "_Id Missing",
 
-            return res.json({
-                success: false,
-                message: "Failed to delete blog",
+//             })
+//         }
+//     }
 
-            })
+//     else if (method === "DELETE"){
+//         if (req.query?.id) {
+//             await Contact.deleteOne(req.query?.id);
 
-          }
-    }
+//             return res.json({
+//                 success: true,
+//                 message: "",
 
+//             })
+
+//           } else {
+
+//             return res.json({
+//                 success: false,
+//                 message: "Failed to delete blog",
+
+//             })
+
+//           }
+//     }
+
+// }
 }

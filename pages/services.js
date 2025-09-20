@@ -245,10 +245,10 @@ const router = useRouter();
     pageNum.push(i);
   }
   const [CurrentNum, setCurrentNum] = useState(5);
-  const [image, setImage] = useState(`https://picsum.photos/1920/1080?random=330`)
+  const [image, setImage] = useState(`https://picsum.photos/1920/1080?random=430`)
   useEffect(() => {
         const interval =  setInterval(() => {
-              setCurrentNum((pre) => (pre + 1) % 330); 
+              setCurrentNum((pre) => (pre + 1) % 430); 
               setImage(`https://picsum.photos/1920/1080?random=${CurrentNum}`) 
   }, 2 * 60 * 1000);
     return () => {
